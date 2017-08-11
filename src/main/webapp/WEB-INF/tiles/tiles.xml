@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+
+	<!-- Default Layout -->
+	<definition name="tiles.defaultLayout" template="/WEB-INF/jsp/layout/layout.jsp">
+		<put-attribute name="top" value="/WEB-INF/jsp/layout/top.jsp" />
+		<put-attribute name="left" value="/WEB-INF/jsp/layout/left.jsp" />
+		<put-attribute name="container" value="" />
+		<put-attribute name="footer" value="/WEB-INF/jsp/layout/footer.jsp" />
+	</definition>
+	<!-- No Layout -->
+	<definition name="tiles.noLayout" template="/WEB-INF/jsp/layout/nolayout.jsp">
+		<put-attribute name="container" value="" />
+	</definition>
+	
+
+	<!-- Dashboard-->
+	<definition name="tiles.dashboard" extends="tiles.defaultLayout">
+		<put-attribute name="container" value="/WEB-INF/jsp/dashboard.jsp" />
+	</definition>
+	
+	<!-- Authorities-->
+	<definition name="tiles.authority1" extends="tiles.defaultLayout">
+		<put-attribute name="container" value="/WEB-INF/jsp/authorities/authority1.jsp" />
+	</definition>
+	<definition name="tiles.authority2" extends="tiles.defaultLayout">
+		<put-attribute name="container" value="/WEB-INF/jsp/authorities/authority2.jsp" />
+	</definition>
+	<definition name="tiles.authority3" extends="tiles.defaultLayout">
+		<put-attribute name="container" value="/WEB-INF/jsp/authorities/authority3.jsp" />
+	</definition>
+	
+	<!-- Login-->
+	<definition name="notiles.login" extends="tiles.noLayout">
+		<put-attribute name="container" value="/WEB-INF/jsp/member/login.jsp" />
+	</definition>
+	
+</tiles-definitions>
