@@ -32,9 +32,33 @@
 		<put-attribute name="container" value="/WEB-INF/jsp/authorities/authority3.jsp" />
 	</definition>
 	
-	<!-- Login-->
+	<!-- Login -->
 	<definition name="notiles.login" extends="tiles.noLayout">
 		<put-attribute name="container" value="/WEB-INF/jsp/member/login.jsp" />
+	</definition>
+	<!-- Register -->
+	<definition name="notiles.register" extends="tiles.noLayout">
+		<put-attribute name="container" value="/WEB-INF/jsp/member/register.jsp" />
+	</definition>
+	
+	<!-- 500 Error -->
+	<definition name="notiles.error.500" extends="tiles.noLayout">
+		<put-attribute name="container" value="/WEB-INF/jsp/error/500.jsp" />
+	</definition>
+	
+	<!-- 403 Error -->
+	<definition name="tiles.error.403" extends="tiles.defaultLayout">
+		<put-attribute name="container" value="/WEB-INF/jsp/error/403.jsp" />
+	</definition>
+	
+	<!-- 404 Error for Tiles -->
+	<definition name="tiles.error.404" extends="tiles.defaultLayout">
+		<put-attribute name="container" value="/WEB-INF/jsp/error/404.jsp" />
+	</definition>
+	
+	<!-- 404 Error for Tiles -->
+	<definition name="notiles.error.404" extends="tiles.noLayout">
+		<put-attribute name="container" value="/WEB-INF/jsp/error/500.jsp" />
 	</definition>
 	
 </tiles-definitions>

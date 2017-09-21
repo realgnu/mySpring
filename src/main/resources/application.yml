@@ -1,0 +1,52 @@
+logging:
+    level:
+        com:
+            realgnu: DEBUG
+        org:
+#            springframework:
+#                web: DEBUG
+            hibernate : DEBUG
+mybatis:
+    configuration:
+        map-underscore-to-camel-case: true
+    mapper-locations: mybatis/mapper/**/*.xml
+    type-aliases-package: com.realgnu.mySpring.security.domain,com.realgnu.mySpring.common.mybatis
+    type-handlers-package: com.realgnu.mySpring.common.mybatis
+server:
+    error:
+        whitelabel:
+            enabled: false
+    session:
+        timeout: 60
+    tomcat:
+        accesslog:
+            buffered: true
+            directory: logs
+            enabled: true
+            file-date-format: .yyyy-MM-dd
+            pattern: '%h %l %t %u "%r" %s %b'
+            prefix: access_log
+            rename-on-rotate: false
+            request-attributes-enabled: false
+            rotate: true
+            suffix: .log
+spring:
+    datasource:
+        driver-class-name: oracle.jdbc.driver.OracleDriver
+        password: lgesdp1119
+        url: jdbc:oracle:thin:@10.150.26.27:3001:HESDPD
+        username: hesdp_app
+    mvc:
+        static-path-pattern: /resources/**
+        view:
+            prefix: /WEB-INF/jsp/
+            suffix: .jsp
+
+#Authentication Exclude URI
+custom-access-decision-manager:
+    excludeUriPrefix:
+    - /error/
+    - /member/login.do
+    - /member/loginDo.do
+    - /member/register.do
+    - /member/registerDo.do

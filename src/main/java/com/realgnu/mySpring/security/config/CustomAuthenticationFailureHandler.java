@@ -23,5 +23,4 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 		request.setAttribute("errorMessage", exception.getMessage());
 		request.getRequestDispatcher("/member/login.do").forward(request, response);
 	}
-
 }

@@ -9,8 +9,8 @@
 		FROM TBL_USER
 		WHERE USER_ID = #{username}
 	</select>
-	<select id="readAuthority" parameterType="String" resultType="org.springframework.security.core.authority.SimpleGrantedAuthority">
-		SELECT C.AUTH_NO
+	<select id="readAuthorities" parameterType="String" resultType="org.springframework.security.core.authority.SimpleGrantedAuthority">
+		SELECT C.AUTH_NAME
 		FROM TBL_USER A,
 		    TBL_USER_AUTH B,
 		    TBL_AUTH C
@@ -21,14 +21,12 @@
 	
 	<insert id="createUser" parameterType="User"> 
 		INSERT INTO TBL_USER (USER_NO, USER_ID, USER_PW, NAME) 
-		VALUES ((SELECT MAX(USER_NO) + 1 FROM TBL_USER), #{password}, #{name}) 
+		VALUES (#{userNo}, #{username}, #{password}, null) 
 	</insert> 
 	
 	<insert id="createAuthority" parameterType="org.springframework.security.core.GrantedAuthority"> 
-		INSERT INTO TBL_USER_AUTH (USER_NO, AUTH_NO) 
-		VALUES 
-		<foreach item="authority" index="index" collection="authorities" separator=","> 
-			(#{userNo}, #{authority}) 
+		<foreach item="authority" index="index" collection="authorities" open="INSERT ALL " separator=" " close="SELECT * FROM DUAL"> 
+			INTO TBL_USER_AUTH (USER_NO, AUTH_NO) VALUES (#{userNo}, #{authority}) 
 		</foreach> 
 	</insert> 
 	
@@ -39,4 +37,9 @@
 	<delete id="deleteAuthority" parameterType="String"> 
 		DELETE FROM TBL_USER_AUTH WHERE USER_NO = #{userNo} 
 	</delete> 
+	
+	<select id="readNewUserNo" parameterType="String" resultType="String">
+		SELECT NVL(MAX(USER_NO) + 1, 1) AS USER_NO
+		FROM TBL_USER
+	</select>
 </mapper>

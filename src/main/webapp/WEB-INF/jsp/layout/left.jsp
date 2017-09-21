@@ -1,4 +1,13 @@
 <%@ page language="java" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="java.util.List
+				,com.realgnu.mySpring.security.config.SecurityConst
+				,com.realgnu.mySpring.common.mybatis.CustomCamelMap" %>
+<%
+	List<CustomCamelMap> myMenuList = (List<CustomCamelMap>)session.getAttribute(SecurityConst.SESSION_USER_MENU_LIST);
+	String requestUri = (String) session.getAttribute("requestUri");
+%>
+<c:set var="myMenuList" value="<%=myMenuList%>"/>
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
@@ -26,30 +35,25 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
         <li class="header">MAIN NAVIGATION</li>
-        <li class="active treeview">
-          <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li class="active"><a href="/dashboard.do"><i class="fa fa-circle-o"></i> Dashboard</a></li>
-            <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
+        <c:forEach var="item" varStatus="status" items="${myMenuList}">
+        <c:if test="${item.menuNo1 ne prevMenuNo1}">
+        	<c:if test="${status.index ne 0}">
           </ul>
         </li>
-        <li class="treeview">
+        	</c:if>
+        <li class="treeview <c:if test='${requestUri eq item.uri}'>active</c:if>">
           <a href="#">
             <i class="fa fa-files-o"></i>
-            <span>Authorities</span>
+            <span>${item.menuName1}</span>
             <span class="pull-right-container">
                <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="/authorities/authority1.do"><i class="fa fa-circle-o"></i> Authority 1</a></li>
-            <li><a href="/authorities/authority2.do"><i class="fa fa-circle-o"></i> Authority 2</a></li>
-            <li><a href="/authorities/authority3.do"><i class="fa fa-circle-o"></i> Authority 3</a></li>
+          </c:if>
+            <li <c:if test='${requestUri eq item.uri}'>class="active"</c:if>><a href="${item.uri}"><i class="fa fa-circle-o"></i> ${item.menuName2}</a></li>
+            <c:set var="prevMenuNo1" value="${item.menuNo1}"/>
+        </c:forEach>
           </ul>
         </li>
       </ul>

@@ -10,7 +10,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import com.realgnu.mySpring.security.domain.User;
@@ -27,23 +26,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		String username = authentication.getName();
 		String password = (String) authentication.getCredentials();
 
-		User user;
 		Collection<? extends GrantedAuthority> authorities;
-		
-		user = (User) userService.loadUserByUsername(username);
-		String encodedPassword = userService.getPasswordEncoder().encode(password);
+		User user = (User) userService.loadUserByUsername(username);
 		String dbPassword = user.getPassword();
-		logger.debug("input password" + password);
-		logger.debug("db password" + dbPassword);
-//		if (!encodedPassword.equals(dbPassword)) {
-//			logger.debug("Incorrect Password.");
-//			throw new BadCredentialsException("Incorrect Password.");
-//		}
-		if (!password.equals(dbPassword)) {
+		if(!userService.getPasswordEncoder().matches(password, dbPassword)) {
 			logger.debug("Incorrect Password.");
 			throw new BadCredentialsException("Incorrect Password.");
 		}
 		authorities = user.getAuthorities();
+
 		return new UsernamePasswordAuthenticationToken(user, password, authorities);
 	}
 

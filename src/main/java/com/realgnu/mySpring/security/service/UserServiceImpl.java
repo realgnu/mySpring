@@ -2,6 +2,7 @@ package com.realgnu.mySpring.security.service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.realgnu.mySpring.security.domain.User;
 import com.realgnu.mySpring.security.mapper.UserMapper;
@@ -33,21 +35,23 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Collection<GrantedAuthority> getAuthorities(String username) {
-		List<GrantedAuthority> authorities = userMapper.readAuthority(username); 
+		List<GrantedAuthority> authorities = userMapper.readAuthorities(username); 
 		return authorities; 
 	}
 
 	@Override
 	public User readUser(String username) {
 		User user = userMapper.readUser(username);
-		user.setAuthorities(userMapper.readAuthority(username));
+		user.setAuthorities(userMapper.readAuthorities(username));
 		return user;
 	}
 
 	@Override
+	@Transactional
 	public void createUser(User user) {
 		String password = user.getPassword();
 		user.setPassword(this.passwordEncoder.encode(password));
+		user.setUserNo(userMapper.readNewUserNo(user.getUsername()));
 		userMapper.createUser(user);
 		userMapper.createAuthority(user);
 	}
@@ -62,5 +66,4 @@ public class UserServiceImpl implements UserService {
 	public PasswordEncoder getPasswordEncoder() {
 		return this.passwordEncoder;
 	}
-
 }

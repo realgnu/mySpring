@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.realgnu.mySpring.security.mapper.AuthMapper">
+	<select id="readAuthorities" resultType="CustomCamelMap" parameterType="String">
+		SELECT AUTH_NO, AUTH_NAME
+		FROM TBL_AUTH
+		<if test="_parameter != null and _parameter != ''">
+		WHERE AUTH_NAME = #{_parameter}
+		</if>
+	</select>
+	<select id="readAuthoritiesByUri" parameterType="String" resultType="org.springframework.security.core.authority.SimpleGrantedAuthority">
+		SELECT DISTINCT A.AUTH_NAME
+		FROM TBL_AUTH A,
+		    TBL_AUTH_MENU B,
+		    TBL_MENU C
+		WHERE C.URI = #{_parameter}
+		AND A.AUTH_NO = B.AUTH_NO
+		AND B.MENU_NO = C.MENU_NO
+	</select>
+	<select id="readAuthMenuList" resultType="CustomCamelMap" parameterType="String">
+		SELECT A.MENU_NO AS MENU_NO1, 
+		    A.MENU_NAME AS MENU_NAME1, 
+		    B.MENU_NO AS MENU_NO2,
+		    B.MENU_NAME AS MENU_NAME2, 
+		    B.URI
+		FROM TBL_MENU A,
+		    TBL_MENU B,
+		    (SELECT 
+		        DISTINCT B.MENU_NO
+		    FROM TBL_AUTH_MENU B,
+		        TBL_USER_AUTH C,
+		        TBL_USER D
+		    WHERE 1 = 1
+		    AND B.AUTH_NO = C.AUTH_NO
+		    AND C.USER_NO = D.USER_NO
+		    AND D.USER_ID = #{_parameter}
+		    ) C
+		WHERE A.MENU_NO = B.HIGH_MENU_NO
+		AND A.MENU_DEPTH_NO = 1
+		AND B.MENU_DEPTH_NO = 2
+		AND B.MENU_NO = C.MENU_NO
+		ORDER BY A.MENU_DEPTH_ORD, B.MENU_DEPTH_ORD
+	</select>
+</mapper>
